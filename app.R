@@ -354,14 +354,15 @@ ui <- fluidPage(
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
+  
   # function for data importing based on arguments
-  import_agd <- function(lozinka){
-    df <- prepare_dataset(paste0("https://github.com/antonio-martinko/depass/", lozinka, ".agd"))  
-    return(df)
-  }
+  # import_agd <- function(lozinka){
+  #   df <- prepare_dataset(paste0("https://github.com/antonio-martinko/depass/", lozinka, ".agd"))  
+  #   return(df)
+  # }
   
   mydata <- reactive({
-    import_agd(input$lozinka)
+    df <- prepare_dataset(paste0(input$lozinka, ".agd"))
   })
   
   cutpoints <- reactive({
