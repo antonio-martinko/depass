@@ -356,7 +356,7 @@ ui <- fluidPage(
 server <- function(input, output) {
   # function for data importing based on arguments
   import_agd <- function(lozinka){
-    df <- prepare_dataset(paste0("C:/R_/depass/", lozinka, ".agd"))  
+    df <- prepare_dataset(paste0("https://github.com/antonio-martinko/depass/", lozinka, ".agd"))  
     return(df)
   }
   
