@@ -14,6 +14,7 @@
 #                    "fmsb", "rsconnect", "shinyscreenshot"))
 
 library(tidyverse)
+library(RCurl)
 library(activAnalyzer)
 library(patchwork)
 library(jpeg)
@@ -362,7 +363,15 @@ server <- function(input, output) {
   # }
   
   mydata <- reactive({
-    df <- prepare_dataset(paste0(input$lozinka, ".agd"))
+    
+    myurl <- paste0("https://raw.github.com/antonio-martinko/depass/", input$lozinka, ".agd")
+    
+    x <- getURL(url = myurl)
+    
+    df <- prepare_dataset(x)
+    
+    return(df)
+    
   })
   
   cutpoints <- reactive({
