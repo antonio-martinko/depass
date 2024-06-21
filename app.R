@@ -14,7 +14,7 @@
 #                    "fmsb", "rsconnect", "shinyscreenshot"))
 
 library(tidyverse)
-library(RCurl)
+library(readr)
 library(activAnalyzer)
 library(patchwork)
 library(jpeg)
@@ -364,13 +364,9 @@ server <- function(input, output) {
   
   mydata <- reactive({
     
-    # myurl <- paste0("https://raw.github.com/antonio-martinko/depass/", input$lozinka, ".agd")
-    # 
-    # x <- getURL(url = myurl)
+    data <- read_csv(paste0("https://raw.githubusercontent.com/antonio-martinko/depass/main/user_files/", input$lozinka, ".csv"))
     
-    df <- prepare_dataset(paste0("https://raw.githubusercontent.com/antonio-martinko/depass/main/", input$lozinka, ".agd"))
-    
-    return(df)
+    return(data)
     
   })
   
