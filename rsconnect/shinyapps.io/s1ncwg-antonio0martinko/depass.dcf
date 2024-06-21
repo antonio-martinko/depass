@@ -5,8 +5,9 @@ account: s1ncwg-antonio0martinko
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 12200590
-bundleId: 8758955
+bundleId: 8774036
 url: https://s1ncwg-antonio0martinko.shinyapps.io/depass/
 version: 1
 asMultiple: FALSE
 asStatic: FALSE
+ignoredFiles: code_list.xlsx|KODNA LISTA.xlsx|user_files
