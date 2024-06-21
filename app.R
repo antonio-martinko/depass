@@ -364,11 +364,11 @@ server <- function(input, output) {
   
   mydata <- reactive({
     
-    myurl <- paste0("https://raw.github.com/antonio-martinko/depass/", input$lozinka, ".agd")
+    # myurl <- paste0("https://raw.github.com/antonio-martinko/depass/", input$lozinka, ".agd")
+    # 
+    # x <- getURL(url = myurl)
     
-    x <- getURL(url = myurl)
-    
-    df <- prepare_dataset(x)
+    df <- prepare_dataset(paste0("https://raw.githubusercontent.com/antonio-martinko/depass/main/", input$lozinka, ".agd"))
     
     return(df)
     
