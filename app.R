@@ -364,7 +364,13 @@ server <- function(input, output) {
   
   mydata <- reactive({
     
-    data <- read_csv(paste0("https://raw.githubusercontent.com/antonio-martinko/depass/main/user_files/", input$lozinka, ".csv"))
+    data <- read_csv(
+      paste0(
+        "https://raw.githubusercontent.com/antonio-martinko/depass/main/user_files/",
+        input$lozinka,
+        ".csv"),
+        col_types = "Tiiiiiiiiin") %>%
+        as.data.frame()
     
     return(data)
     
