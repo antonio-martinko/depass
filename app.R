@@ -356,11 +356,10 @@ ui <- fluidPage(
 # Define server logic required to draw a histogram
 server <- function(input, output) {
   
-  # function for data importing based on arguments
-  # import_agd <- function(lozinka){
-  #   df <- prepare_dataset(paste0("https://github.com/antonio-martinko/depass/", lozinka, ".agd"))  
-  #   return(df)
-  # }
+  # previously, read in the .agd file in a new R script file
+  # use prepare_dataset to process the raw data
+  # write the data frame as either excel or .csv file and then store it on Github
+  # every other time in the app import the excel or .csv file and not a raw .agd file
   
   mydata <- reactive({
     
@@ -640,8 +639,8 @@ server <- function(input, output) {
       geom_link(aes(x = 1, xend = 1,
                     y = 0, yend = total_steps, color = "#bb353c"), 
                 size = 16, lineend = "round") +
-      geom_label(aes(x = 1, y = total_steps, 
-                     label = paste0("Ukupan broj koraka", ": ", total_steps)), hjust = 1.2) +
+      geom_label(aes(x = 1, y = 1, 
+                     label = paste0("Ukupan broj koraka", ": ", total_steps)), hjust = 0.8) +
       geom_point(aes(x = 1, y = total_steps), size = 9, 
                  shape = 21, fill = "white") +
       geom_point(aes(x = 1, y = total_steps), size = 6, 
@@ -652,35 +651,16 @@ server <- function(input, output) {
       coord_polar(theta = "y") + 
       theme_void()
 
-    # Take a screenshot
-    observeEvent(input$screen_totalsteps, {
-      screenshot(
-        selector = "#plot_steps",
-        scale = 1.5,
-        filename = "ukupno koraci"
-      )
-    })
-    
-    # summed_results() %>%
-    #   ggplot() +
-    #   # background_image(raster.img = walking_steps) +
-    #   geom_hline(aes(yintercept = total_steps), colour = 4, linewidth = 3) +
-    #   geom_text(aes(0, total_steps,
-    #                 label = paste("Vaša tjedna količina koraka je",
-    #                               total_steps, "koraka."), vjust = 2),
-    #             size = 6, fontface = "bold") +
-    #   # geom_hline(yintercept = 150, color = "red", linewidth = 3) +
-    #   # geom_text(aes(0, 150,
-    #   #               label = paste("Preporučena tjedna količina koraka je ~ 70 000 (~ 10 000 dnevno)."), 
-    #   #               vjust = -2), size = 3.5,
-    #   #           fontface = "bold") +
-    #   labs(title = "Ukupan broj koraka",
-    #        x = NULL, 
-    #        y = NULL) +
-    #   theme_minimal() +
-    #   theme(axis.title.x = element_blank(),
-    #         axis.text.x = element_blank())
-    
+  })
+  
+  
+  # Take a screenshot
+  observeEvent(input$screen_totalsteps, {
+    screenshot(
+      selector = "#plot_steps",
+      scale = 1.5,
+      filename = "ukupno koraci"
+    )
   })
   
   output$plot_daily <- renderPlot({
