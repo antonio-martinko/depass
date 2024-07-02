@@ -90,25 +90,27 @@ ui <- fluidPage(
              
              br(),
              
+             h3("Kliknite na karticu", code("Moj izvještaj"),".",
+                style="text-align:center"),
              h3("1. U prostoru za unos", code("lozinke"),"upišite jedinstvenu lozinku koja vam je dodijeljena.",
                 style="text-align:center"),
              h3("Pripazite na unos velikih/malih slova!",
                 style="text-align:center"),
-             h3("2. U idućem koraku izaberite roditelj (P), brat/sestra (S) ili dijete (C) među ponuđenim opcijama.",
+             h3("2. U idućem koraku izaberite roditelj ili dijete među ponuđenim opcijama.",
                 style="text-align:center"),
              h3("3. Pod", code("Spol"), "odaberite između opcija M ili Ž.",
                 style="text-align:center"),
              h3("Ovo će biti bitno zbog nekih od izračuna unutar aplikacije.",
                 style="text-align:center"),
-             h3("4. Pod", code("Dob"), "unesite vaše godine.",
+             # h3("4. Pod", code("Dob"), "unesite vaše godine.",
+             #    style="text-align:center"),
+             h3("4. Pod", code("Tjelesna visina"), "unesite vašu visinu u centimetrima.",
                 style="text-align:center"),
-             h3("5. Pod", code("Tjelesna visina"), "unesite vašu visinu u centimetrima.",
-                style="text-align:center"),
-             h3("6. Pod", code("Tjelesna masa"), "unesite vašu tjelesnu masu u kilogramima.",
-                style="text-align:center"),
+             # h3("6. Pod", code("Tjelesna masa"), "unesite vašu tjelesnu masu u kilogramima.",
+             #    style="text-align:center"),
              h3("Kod unosa ovih vrijednosti se prihvaćaju samo cijeli brojevi!",
                 style="text-align:center"),
-             h3("7. Ako želite preuzeti izvještaj, kliknite", code("Download"), ".",
+             h3("5. Ako želite preuzeti izvještaj, kliknite", code("Preuzmi!"),
                 style="text-align:center"),
              
              br(),
@@ -283,21 +285,21 @@ ui <- fluidPage(
                            label = "Lozinka"),
                  tags$hr(),
                  radioButtons(inputId = "uzrast", 
-                              label = "Izaberite opciju roditelj (P), brat/sestra (S) ili dijete (C)", 
-                              choices = c("P", "S", "C"), 
-                              selected = "C"),
+                              label = "Izaberite opciju roditelj ili dijete", 
+                              choices = c("Roditelj", "Dijete"), 
+                              selected = "Dijete"),
                  radioButtons(inputId = "sex", 
                               label = "Spol", 
                               choices = c("M" = "male", "Ž" = "female"), 
                               selected = "male"),
-                 numericInput(inputId = "age", 
-                              label = "Dob", 
-                              value = 0, 
-                              min = 5, max = 75),
-                 numericInput(inputId = "weight", 
-                              label = "Tjelesna masa (u kg)", 
-                              value = 0, 
-                              min = 10, max = 175),
+                 # numericInput(inputId = "age", 
+                 #              label = "Dob", 
+                 #              value = 0, 
+                 #              min = 5, max = 75),
+                 # numericInput(inputId = "weight", 
+                 #              label = "Tjelesna masa (u kg)", 
+                 #              value = 0, 
+                 #              min = 10, max = 175),
                  numericInput(inputId = "height", 
                               label = "Tjelesna visina (u cm)", 
                               value = 0, 
@@ -356,10 +358,10 @@ ui <- fluidPage(
 # Define server logic required to draw a histogram
 server <- function(input, output) {
   
-  # previously, read in the .agd file in a new R script file
-  # use prepare_dataset to process the raw data
-  # write the data frame as either excel or .csv file and then store it on Github
-  # every other time in the app import the excel or .csv file and not a raw .agd file
+  # previously, I had loaded in the .agd files in a new R script file
+  # used prepare_dataset to process the raw data
+  # written the data frame as either excel or .csv file and then stored it on Github
+  # every other time in the app I import the excel or .csv file and not a raw .agd file
   
   mydata <- reactive({
     
@@ -413,8 +415,8 @@ server <- function(input, output) {
       sed_cutpoint = cutpoints$sed_cutpoint, 
       mpa_cutpoint = cutpoints$mpa_cutpoint, 
       vpa_cutpoint = cutpoints$vpa_cutpoint, 
-      age = input$age,
-      weight = input$weight,
+      # age = input$age,
+      # weight = input$weight,
       sex = input$sex
     )
   })
@@ -423,8 +425,8 @@ server <- function(input, output) {
   results_by_day <- reactive({
     mydata_with_intensity_marks() %>%
       recap_by_day(
-        age = input$age,
-        weight = input$weight,
+        # age = input$age,
+        # weight = input$weight,
         sex = input$sex,
         valid_wear_time_start = "00:00:00",
         valid_wear_time_end = "23:59:00",
@@ -707,13 +709,15 @@ server <- function(input, output) {
     total_steps <- daily_plotresults() %>%
       filter(variable == "Ukupni koraci")
     
-    rect_data <- data.frame(xmin_date = c(total_steps$date[1], total_steps$date[2],
-                                          total_steps$date[3], total_steps$date[4],                                                       total_steps$date[5], total_steps$date[6]),
-                            xmax_date = c(total_steps$date[2], total_steps$date[3],                                                       total_steps$date[4], total_steps$date[5],                                                       total_steps$date[6], total_steps$date[7]),
+    rect_data <- data.frame(xmin_date = c(total_steps$date[1], total_steps$date[2], total_steps$date[3],
+                                          total_steps$date[4], total_steps$date[5], total_steps$date[6]),
+                            xmax_date = c(total_steps$date[2], total_steps$date[3], total_steps$date[4], 
+                                          total_steps$date[5], total_steps$date[6], total_steps$date[7]),
                             ymin_steps = 0, ymax_steps = 16000,
                             col = c("red", "green", "blue", "gray", "yellow", "violet"),
-                            x = c(1.5, 2.5, 3.5),
-                            xend = c(1.5, 2.5, 3.5), y = c(11000, 13000, 7000), yend =                                       c(12000, 15000, 8000), age_group = c("Girls", "Boys",                                                                                "Adults"))
+                            x = c(1.5, 2.5, 3.5), xend = c(1.5, 2.5, 3.5), 
+                            y = c(11000, 13000, 7000), yend = c(12000, 15000, 8000),
+                            age_group = c("Girls", "Boys", "Adults"))
     
     daily_plotresults() %>%
       filter(variable == "Ukupni koraci") %>%
